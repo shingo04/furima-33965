@@ -75,6 +75,12 @@ RSpec.describe User, type: :model do
         @user.valid?
         expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password")
       end
+      it "passwordが英数字混ではないと登録できない" do
+        @user.password = "222222"
+        @user.password_confirmation = "222222"
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Password Complexity requirement not met. Please use: 1 uppercase, 1 lowercase, 1 digit and 1 special character")
+      end
       it "last_nameが空では登録できない" do
         @user.last_name = ""
         @user.valid?
