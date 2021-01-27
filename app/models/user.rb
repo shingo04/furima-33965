@@ -12,10 +12,17 @@ class User < ApplicationRecord
 
      errors.add :password, 'Complexity requirement not met. Please use: 1 uppercase, 1 lowercase, 1 digit and 1 special character'
     end
-  validates :nickname, presence: true
-  validates :last_name, presence: true, format: { with: /\A[ぁ-んァ-ン一-龥]+\z/ }
-  validates :first_name, presence: true, format: { with: /\A[ぁ-んァ-ン一-龥]+\z/ }
-  validates :read_last_name, presence: true, format: { with: /\A[\p{katakana}\p{blank}ー－]+\z/}
-  validates :read_first_name, presence: true, format: { with: /\A[\p{katakana}\p{blank}ー－]+\z/}
-  validates :birth_date, presence: true
+
+  with_options presence: true do
+    validates :nickname
+    with_options format: { with: /\A[ぁ-んァ-ン一-龥]+\z/ } do
+      validates :last_name
+      validates :first_name
+    end
+    with_options format: { with: /\A[\p{katakana}\p{blank}ー－]+\z/} do
+      validates :read_last_name
+      validates :read_first_name
+    end
+    validates :birth_date
+  end
 end
