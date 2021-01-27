@@ -75,9 +75,21 @@ RSpec.describe User, type: :model do
         @user.valid?
         expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password")
       end
-      it "passwordが英数字混ではないと登録できない" do
+      it "passwordが半角数字のみだと登録できない" do
         @user.password = "222222"
         @user.password_confirmation = "222222"
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Password Complexity requirement not met. Please use: 1 uppercase, 1 lowercase, 1 digit and 1 special character")
+      end
+      it "passwordが半角英字のみだと登録できない" do
+        @user.password = "ssssss"
+        @user.password_confirmation = "ssssss"
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Password Complexity requirement not met. Please use: 1 uppercase, 1 lowercase, 1 digit and 1 special character")
+      end
+      it "passwordが全角だと登録できない" do
+        @user.password = "２２２２２２"
+        @user.password_confirmation = "２２２２２２"
         @user.valid?
         expect(@user.errors.full_messages).to include("Password Complexity requirement not met. Please use: 1 uppercase, 1 lowercase, 1 digit and 1 special character")
       end
