@@ -2,6 +2,7 @@ class OrdersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_item
   before_action :conditions
+  before_action :sold_out_item, only: [:index, :create]
 
   def index
     @order_address = OrderAddress.new
@@ -35,11 +36,15 @@ class OrdersController < ApplicationController
   end
 
   def pay_item
-    Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
-      Payjp::Charge.create(
-        amount: @item[:item_price],
-        card: address_params[:token],
-        currency: 'jpy'
-      )
+    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
+    Payjp::Charge.create(
+      amount: @item[:item_price],
+      card: address_params[:token],
+      currency: 'jpy'
+    )
+  end
+
+  def sold_out_item
+    redirect_to root_path if @item.order.present?
   end
 end
