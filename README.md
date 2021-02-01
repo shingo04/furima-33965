@@ -39,7 +39,7 @@
 - has_many :comments
 - has_one :buy
 
-## buysテーブル
+## ordersテーブル
 
 | Column | Type       | Options                        |
 | ------ | ---------- | ------------------------------ |
